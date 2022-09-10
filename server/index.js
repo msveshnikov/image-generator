@@ -3,7 +3,7 @@ const onError = require("./onError.js");
 const fs = require("fs");
 const express = require("express");
 const serveIndex = require("serve-index");
-const shell = require("async-shelljs");
+const shell = require("shelljs");
 
 const app = express();
 
@@ -46,7 +46,7 @@ app.post("/prompt", (req, res) => {
         });
     }
 
-    shell.exec('~/m "' + req.body.prompt + '"');
+    shell.exec('~/m "' + req.body.prompt + '"', { async: true });
 
     return res.status(201).json("Started, will take ~30 minutes");
 });
