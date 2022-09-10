@@ -1,31 +1,27 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import PhotoGallery from "react-photo-gallery";
 
+const API_URL = "https://mega.maxsoft.tk";
+
+export async function getPhotos() {
+    const response = await fetch(`${API_URL}/images`);
+    const photoData = await response.json();
+
+    return photoData.map((photo) => ({
+        src: `${API_URL}/${photo.name}`,
+        width: 1,
+        height: 1,
+    }));
+}
 
 function App() {
-    const photos = [
-        {
-            src: "http://placekitten.com/200/300",
-            width: 3,
-            height: 4,
-        },
-        {
-            src: "http://placekitten.com/200/200",
-            width: 1,
-            height: 1,
-        },
-        {
-            src: "http://placekitten.com/300/400",
-            width: 3,
-            height: 4,
-        },
-    ];
+    const [photos, setPhotos] = useState([]);
 
-    return (
-        <>
-            <PhotoGallery photos={photos} />
-        </>
-    );
+    useEffect(() => {
+        getPhotos().then(setPhotos);
+    }, []);
+
+    return <PhotoGallery photos={photos} />;
 }
 
 export default App;
