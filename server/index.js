@@ -10,6 +10,8 @@ const app = express();
 const ALLOWED_ORIGIN = [
     "https://mega.maxsoft.tk",
     "http://localhost:3000",
+    "https://maxsoft-diffusion.netlify.app",
+    "ai.maxsoft.tk",
 ];
 
 app.use(
@@ -19,12 +21,12 @@ app.use(
 );
 app.use(express.json());
 
-app.use("/", serveIndex("txt2img-samples")); // shows you the file list
-app.use("/", express.static("txt2img-samples")); // serve the actual files
+app.use("/", serveIndex("txt2img-samples/samples")); // shows you the file list
+app.use("/", express.static("txt2img-samples/samples")); // serve the actual files
 
 app.get("/images", async (req, res) => {
     try {
-        const fullPath = "txt2img-samples";
+        const fullPath = "txt2img-samples/samples";
         const dir = fs.opendirSync(fullPath);
         let entity;
         let listing = [];
