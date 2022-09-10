@@ -3,7 +3,7 @@ const onError = require("./onError.js");
 const fs = require("fs");
 const express = require("express");
 const serveIndex = require("serve-index");
-const shell = require("shelljs");
+const shell = require("async-shelljs");
 
 const app = express();
 
