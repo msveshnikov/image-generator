@@ -21,8 +21,6 @@ app.use(
 );
 app.use(express.json());
 
-app.use("/", serveIndex("txt2img-samples/samples")); // shows you the file list
-app.use("/", express.static("txt2img-samples/samples")); // serve the actual files
 
 app.get("/images", async (req, res) => {
     try {
@@ -53,5 +51,8 @@ app.post("/prompt", (req, res) => {
 
     return res.status(201).json("Started, will take ~30 minutes");
 });
+
+app.use("/", serveIndex("txt2img-samples/samples")); // shows you the file list
+app.use("/", express.static("txt2img-samples/samples")); // serve the actual files
 
 app.listen(8080);
