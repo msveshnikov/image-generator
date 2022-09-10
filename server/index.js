@@ -3,14 +3,12 @@ const onError = require("./onError.js");
 const fs = require("fs");
 const express = require("express");
 const serveIndex = require("serve-index");
+const shell = require("shelljs");
+
 const app = express();
 
 const ALLOWED_ORIGIN = [
-    "https://swipe.maxsoft.tk",
-    "https://swiper.ml",
-    "https://www.swiper.ml",
-    "https://develop--photo-swiper.netlify.app",
-    "https://photo-swiper.netlify.app",
+    "https://mega.maxsoft.tk",
     "http://localhost:3000",
 ];
 
@@ -43,18 +41,15 @@ app.get("/images", async (req, res) => {
 });
 
 app.post("/prompt", (req, res) => {
-    if (!req.body.eventType || !req.body.photoUrl || !req.body.userId) {
+    if (!req.body.prompt) {
         return res.status(400).send({
-            message: "eventType, photoUrl and userId are required.",
+            message: "prompt is required.",
         });
     }
 
-    const event = {
-        ...req.body,
-        createdAt: new Date(),
-    };
-    Event.create(event).catch(onError);
-    return res.status(201).json(event);
+    shell.exec('~/m "' + req.body.prompt + '"');
+
+    return res.status(201).json("Started, will take ~30 minutes");
 });
 
 app.listen(8080);
