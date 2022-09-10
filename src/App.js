@@ -22,6 +22,7 @@ function App() {
     const [photos, setPhotos] = useState([]);
     const [currentImage, setCurrentImage] = useState(0);
     const [viewerIsOpen, setViewerIsOpen] = useState(false);
+    const [buttonPressed, setButtonPressed] = useState(false);
     const [promptText, setPromptText] = useState("");
 
     const openLightbox = useCallback((event, { photo, index }) => {
@@ -48,7 +49,12 @@ function App() {
         };
         fetch(`${API_URL}/prompt`, requestOptions)
             .then((response) => response.json())
-            .then((data) => console.log(data));
+            .then((data) => {
+                console.log(data);
+                if (data === "Started, will take ~30 minutes") {
+                    setButtonPressed(true);
+                }
+            });
     };
 
     useEffect(() => {
@@ -69,8 +75,14 @@ function App() {
             <br />
             <br />
             <Grid container justifyContent="center">
-                <Button justify="center" color="secondary" variant="contained" onClick={handleClick}>
-                    Generate!
+                <Button
+                    disabled={buttonPressed}
+                    justify="center"
+                    color="secondary"
+                    variant="contained"
+                    onClick={handleClick}
+                >
+                    {buttonPressed ? "Come back in 30 minutes" : "Generate!"}
                 </Button>
             </Grid>
 

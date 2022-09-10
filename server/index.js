@@ -21,7 +21,6 @@ app.use(
 );
 app.use(express.json());
 
-
 app.get("/images", async (req, res) => {
     try {
         const fullPath = "txt2img-samples/samples";
