@@ -1,25 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import PhotoGallery from "react-photo-gallery";
+
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const photos = [
+        {
+            src: "http://placekitten.com/200/300",
+            width: 3,
+            height: 4,
+        },
+        {
+            src: "http://placekitten.com/200/200",
+            width: 1,
+            height: 1,
+        },
+        {
+            src: "http://placekitten.com/300/400",
+            width: 3,
+            height: 4,
+        },
+    ];
+
+    return (
+        <>
+            <PhotoGallery photos={photos} />
+        </>
+    );
 }
 
 export default App;
