@@ -64,7 +64,7 @@ function App() {
                 multiline={true}
                 maxRows={2}
                 fullWidth={true}
-                style={{ margin: 12 }}
+                style={{ padding: 12 }}
                 autoComplete="true"
                 value={promptText}
                 onChange={onChange}
