@@ -4,6 +4,7 @@ import Carousel, { Modal, ModalGateway } from "react-images";
 import { Button, Input, Grid } from "@material-ui/core";
 
 const API_URL = "https://mega.maxsoft.tk";
+const blacklist = ["00002.png", "00004.png", "00010.png", "00014.png", "00005.png"];
 
 function App() {
     const [photos, setPhotos] = useState([]);
@@ -47,6 +48,7 @@ function App() {
             .then((res) =>
                 res
                     .sort((a, b) => (a.name > b.name ? 1 : -1))
+                    .filter((photo) => !blacklist.includes(photo.name))
                     .map((photo) => ({
                         src: `${API_URL}/${photo.name}`,
                         width: 1,
@@ -62,6 +64,7 @@ function App() {
                 multiline={true}
                 maxRows={2}
                 fullWidth={true}
+                style={{ margin: 12 }}
                 autoComplete="true"
                 value={promptText}
                 onChange={onChange}
