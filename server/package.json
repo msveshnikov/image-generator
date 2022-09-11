@@ -9,7 +9,6 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
-        "async-shelljs": "^0.1.4",
         "cors": "^2.8.5",
         "express": "^4.18.1",
         "serve-index": "^1.9.1",

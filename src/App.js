@@ -41,21 +41,19 @@ function App() {
             });
     };
 
-    async function getPhotos() {
-        const response = await fetch(`${API_URL}/images`);
-        const photoData = await response.json();
-
-        return photoData
-            .sort((a, b) => (a.name > b.name ? 1 : -1))
-            .map((photo) => ({
-                src: `${API_URL}/${photo.name}`,
-                width: 1,
-                height: 1,
-            }));
-    }
-
     useEffect(() => {
-        getPhotos().then(setPhotos);
+        fetch(`${API_URL}/images`)
+            .then((res) => res.json())
+            .then((res) =>
+                res
+                    .sort((a, b) => (a.name > b.name ? 1 : -1))
+                    .map((photo) => ({
+                        src: `${API_URL}/${photo.name}`,
+                        width: 1,
+                        height: 1,
+                    }))
+            )
+            .then((res) => setPhotos(res));
     }, []);
 
     return (
