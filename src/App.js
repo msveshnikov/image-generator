@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import PhotoGallery from "react-photo-gallery";
 import Carousel, { Modal, ModalGateway } from "react-images";
 import { Button, Input, Grid } from "@material-ui/core";
+import axios from "axios";
 
 const API_URL = "https://mega.maxsoft.tk";
 const blacklist = ["00002.png", "00004.png", "00010.png", "00014.png", "00005.png"];
@@ -23,15 +24,33 @@ function App() {
         setViewerIsOpen(false);
     };
 
-    const onChange = (event) => {
+    const translate = async (text) => {
+        if (!text) {
+            return "";
+        }
+        var res = await axios.post(`https://libretranslate.de/detect`, { q: text });
+        const lang = res.data[0].language;
+        if (lang === "en") {
+            return text;
+        }
+        let data = {
+            q: text,
+            source: lang,
+            target: "en",
+        };
+        res = await axios.post(`https://libretranslate.de/translate`, data);
+        return res.data.translatedText;
+    };
+
+    const onChange = async (event) => {
         setPromptText(event.target.value);
     };
 
-    const handleClick = () => {
+    const handleClick = async () => {
         const requestOptions = {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ prompt: promptText }),
+            body: JSON.stringify({ prompt: await translate(promptText) }),
         };
         fetch(`${API_URL}/prompt`, requestOptions)
             .then((response) => response.json())
@@ -43,10 +62,10 @@ function App() {
     };
 
     useEffect(() => {
-        fetch(`${API_URL}/images`)
-            .then((res) => res.json())
+        axios
+            .get(`${API_URL}/images`)
             .then((res) =>
-                res
+                res.data
                     .sort((a, b) => (a.name > b.name ? 1 : -1))
                     .filter((photo) => !blacklist.includes(photo.name))
                     .map((photo) => ({
