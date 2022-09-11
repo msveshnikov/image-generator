@@ -1,17 +1,15 @@
 const cors = require("cors");
-const onError = require("./onError.js");
 const fs = require("fs");
 const express = require("express");
 const serveIndex = require("serve-index");
 const shell = require("shelljs");
-
 const app = express();
 
 const ALLOWED_ORIGIN = [
     "https://mega.maxsoft.tk",
     "http://localhost:3000",
     "https://maxsoft-diffusion.netlify.app",
-    "ai.maxsoft.tk",
+    "https://ai.maxsoft.tk",
 ];
 
 app.use(
@@ -22,21 +20,17 @@ app.use(
 app.use(express.json());
 
 app.get("/images", async (req, res) => {
-    try {
-        const fullPath = "txt2img-samples/samples";
-        const dir = fs.opendirSync(fullPath);
-        let entity;
-        let listing = [];
-        while ((entity = dir.readSync()) !== null) {
-            if (entity.isFile()) {
-                listing.push({ type: "f", name: entity.name });
-            }
+    const fullPath = "txt2img-samples/samples";
+    const dir = fs.opendirSync(fullPath);
+    let entity;
+    let listing = [];
+    while ((entity = dir.readSync()) !== null) {
+        if (entity.isFile()) {
+            listing.push({ caption: "Caption", name: entity.name });
         }
-        dir.closeSync();
-        res.json(listing);
-    } catch (err) {
-        onError(err, res);
     }
+    dir.closeSync();
+    res.json(listing);
 });
 
 app.post("/prompt", (req, res) => {
@@ -47,7 +41,6 @@ app.post("/prompt", (req, res) => {
     }
 
     shell.exec('~/m "' + req.body.prompt + '"', { async: true });
-
     return res.status(201).json("Started, will take ~30 minutes");
 });
 

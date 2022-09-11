@@ -5,19 +5,6 @@ import { Button, Input, Grid } from "@material-ui/core";
 
 const API_URL = "https://mega.maxsoft.tk";
 
-export async function getPhotos() {
-    const response = await fetch(`${API_URL}/images`);
-    const photoData = await response.json();
-
-    return photoData
-        .sort((a, b) => (a.name > b.name ? 1 : -1))
-        .map((photo) => ({
-            src: `${API_URL}/${photo.name}`,
-            width: 1,
-            height: 1,
-        }));
-}
-
 function App() {
     const [photos, setPhotos] = useState([]);
     const [currentImage, setCurrentImage] = useState(0);
@@ -40,8 +27,6 @@ function App() {
     };
 
     const handleClick = () => {
-        console.log(promptText);
-        // Simple POST request with a JSON body using fetch
         const requestOptions = {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -50,12 +35,24 @@ function App() {
         fetch(`${API_URL}/prompt`, requestOptions)
             .then((response) => response.json())
             .then((data) => {
-                console.log(data);
                 if (data === "Started, will take ~30 minutes") {
                     setButtonPressed(true);
                 }
             });
     };
+
+    async function getPhotos() {
+        const response = await fetch(`${API_URL}/images`);
+        const photoData = await response.json();
+
+        return photoData
+            .sort((a, b) => (a.name > b.name ? 1 : -1))
+            .map((photo) => ({
+                src: `${API_URL}/${photo.name}`,
+                width: 1,
+                height: 1,
+            }));
+    }
 
     useEffect(() => {
         getPhotos().then(setPhotos);
