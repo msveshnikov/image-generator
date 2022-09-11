@@ -25,21 +25,25 @@ function App() {
     };
 
     const translate = async (text) => {
-        if (!text) {
-            return "";
-        }
-        var res = await axios.post(`https://libretranslate.de/detect`, { q: text });
-        const lang = res.data[0].language;
-        if (lang === "en") {
+        try {
+            if (!text) {
+                return "";
+            }
+            var res = await axios.post(`https://libretranslate.de/detect`, { q: text });
+            const lang = res.data[0].language;
+            if (lang === "en") {
+                return text;
+            }
+            let data = {
+                q: text,
+                source: lang,
+                target: "en",
+            };
+            res = await axios.post(`https://libretranslate.de/translate`, data);
+            return res.data.translatedText;
+        } catch (e) {
             return text;
         }
-        let data = {
-            q: text,
-            source: lang,
-            target: "en",
-        };
-        res = await axios.post(`https://libretranslate.de/translate`, data);
-        return res.data.translatedText;
     };
 
     const onChange = async (event) => {
@@ -47,18 +51,11 @@ function App() {
     };
 
     const handleClick = async () => {
-        const requestOptions = {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ prompt: await translate(promptText) }),
-        };
-        fetch(`${API_URL}/prompt`, requestOptions)
-            .then((response) => response.json())
-            .then((data) => {
-                if (data === "Started, will take ~30 minutes") {
-                    setButtonPressed(true);
-                }
-            });
+        axios.post(`${API_URL}/prompt`, { prompt: await translate(promptText) }).then((res) => {
+            if (res.data === "Started, will take ~30 minutes") {
+                setButtonPressed(true);
+            }
+        });
     };
 
     useEffect(() => {
@@ -87,7 +84,7 @@ function App() {
                 autoComplete="true"
                 value={promptText}
                 onChange={onChange}
-                placeholder="Portrait of a nice girl, 4k, detailed, trending in artstation, fantasy vivid colors"
+                placeholder="Portrait of a nice girl, 4k, detailed, trending in artstation, fantasy vivid colors (можно и по русски) "
             />
             <br />
             <br />
