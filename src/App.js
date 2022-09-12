@@ -103,7 +103,7 @@ function App() {
                     variant="contained"
                     onClick={handleClick}
                 >
-                    {buttonPressed ? "Come back in 30 minutes" : "Generate!"}
+                    {buttonPressed ? "Come back in 15 minutes" : "Generate!"}
                 </Button>
             </Grid>
 
