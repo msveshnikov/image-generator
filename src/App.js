@@ -4,7 +4,9 @@ import Carousel, { Modal, ModalGateway } from "react-images";
 import { Button, Input, Grid } from "@material-ui/core";
 import axios from "axios";
 
-const API_URL = "https://mega.maxsoft.tk";
+ const API_URL = "https://mega.maxsoft.tk";
+// const API_URL = "http://localhost:8080";
+
 const blacklist = ["00002.png", "00004.png", "00010.png", "00014.png", "00005.png", "00047.png"];
 
 function App() {
@@ -72,6 +74,11 @@ function App() {
                     }))
             )
             .then((res) => setPhotos(res));
+        axios.get(`${API_URL}/busy`).then((res) => {
+            if (res.data) {
+                setButtonPressed(true);
+            }
+        });
     }, []);
 
     return (

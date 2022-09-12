@@ -19,6 +19,11 @@ app.use(
 );
 app.use(express.json());
 
+var busy = false;
+app.get("/busy", async (req, res) => {
+    res.json(busy);
+});
+
 app.get("/images", async (req, res) => {
     const fullPath = "txt2img-samples/samples";
     const dir = fs.opendirSync(fullPath);
@@ -39,8 +44,10 @@ app.post("/prompt", (req, res) => {
             message: "prompt is required.",
         });
     }
-
-    shell.exec('~/m "' + req.body.prompt + '"', { async: true });
+    busy = true;
+    shell.exec('~/m "' + req.body.prompt + '"', function (code, stdout, stderr) {
+        busy = false;
+    });
     return res.status(201).json("Started, will take ~30 minutes");
 });
 
