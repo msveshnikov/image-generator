@@ -5,7 +5,7 @@ import { Button, Input, Grid } from "@material-ui/core";
 import axios from "axios";
 
 const API_URL = "https://mega.maxsoft.tk";
-const blacklist = ["00002.png", "00004.png", "00010.png", "00014.png", "00005.png"];
+const blacklist = ["00002.png", "00004.png", "00010.png", "00014.png", "00005.png", "00047.png"];
 
 function App() {
     const [photos, setPhotos] = useState([]);
@@ -78,7 +78,7 @@ function App() {
         <>
             <Input
                 multiline={true}
-                maxRows={2}
+                maxRows={3}
                 fullWidth={true}
                 style={{ padding: 12 }}
                 autoComplete="true"
