@@ -44,6 +44,11 @@ app.post("/prompt", (req, res) => {
             message: "prompt is required.",
         });
     }
+    if (busy) {
+        return res.status(400).send({
+            message: "already in progress, please wait.",
+        });
+    }
     busy = true;
     shell.exec('~/m "' + req.body.prompt + '"', function (code, stdout, stderr) {
         busy = false;
