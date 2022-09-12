@@ -3,6 +3,7 @@ import PhotoGallery from "react-photo-gallery";
 import Carousel, { Modal, ModalGateway } from "react-images";
 import { Button, Input, Grid } from "@material-ui/core";
 import axios from "axios";
+import Copyright from "./Copyright";
 
  const API_URL = "https://mega.maxsoft.tk";
 // const API_URL = "http://localhost:8080";
@@ -123,6 +124,7 @@ function App() {
                     </Modal>
                 )}
             </ModalGateway>
+            <Copyright/>
         </>
     );
 }
