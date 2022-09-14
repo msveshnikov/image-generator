@@ -1,7 +1,7 @@
 # Stable Diffusion
 
 Demo:
-https://maxsoft-diffusion.netlify.app/
+https://ai.maxsoft.tk/
 
 ReactJS frontend with simple ExpressJS API to stable diffusion generation script.
 
