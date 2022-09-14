@@ -5,19 +5,18 @@ import { Button, Input, Grid } from "@material-ui/core";
 import axios from "axios";
 import Copyright from "./Copyright";
 
- const API_URL = "https://mega.maxsoft.tk";
-// const API_URL = "http://localhost:8080";
+const API_URL = "https://mega.maxsoft.tk";
 
-const blacklist = ["00002.png", "00004.png", "00010.png", "00014.png", "00005.png", "00047.png"];
+const blacklist = ["00002.png", "00004.png", "00010.png", "00014.png", "00005.png", "00047.png", "00071.png"];
 
 function App() {
-    const [photos, setPhotos] = useState([]);
+    const [images, setImages] = useState([]);
     const [currentImage, setCurrentImage] = useState(0);
     const [viewerIsOpen, setViewerIsOpen] = useState(false);
     const [buttonPressed, setButtonPressed] = useState(false);
     const [promptText, setPromptText] = useState("");
 
-    const openLightbox = useCallback((event, { photo, index }) => {
+    const openLightbox = useCallback((event, { _, index }) => {
         setCurrentImage(index);
         setViewerIsOpen(true);
     }, []);
@@ -54,32 +53,34 @@ function App() {
     };
 
     const handleClick = async () => {
-        axios.post(`${API_URL}/prompt`, { prompt: await translate(promptText) }).then((res) => {
-            if (res.data === "Started, will take ~30 minutes") {
-                setButtonPressed(true);
-            }
-        });
+        const res = await axios.post(`${API_URL}/prompt`, { prompt: await translate(promptText) });
+        if (res.data === "Started, will take ~30 minutes") {
+            setButtonPressed(true);
+        }
+    };
+
+    const checkBusy = async () => {
+        const res = await axios.get(API_URL + "/busy");
+        setButtonPressed(res.data);
+    };
+
+    const loadImages = async () => {
+        const res = await axios.get(API_URL + "/images");
+        setImages(
+            res.data
+                .sort((a, b) => (a.name > b.name ? 1 : -1))
+                .filter((image) => !blacklist.includes(image.name))
+                .map((image) => ({
+                    src: API_URL + "/" + image.name,
+                    width: 1,
+                    height: 1,
+                }))
+        );
     };
 
     useEffect(() => {
-        axios
-            .get(`${API_URL}/images`)
-            .then((res) =>
-                res.data
-                    .sort((a, b) => (a.name > b.name ? 1 : -1))
-                    .filter((photo) => !blacklist.includes(photo.name))
-                    .map((photo) => ({
-                        src: `${API_URL}/${photo.name}`,
-                        width: 1,
-                        height: 1,
-                    }))
-            )
-            .then((res) => setPhotos(res));
-        axios.get(`${API_URL}/busy`).then((res) => {
-            if (res.data) {
-                setButtonPressed(true);
-            }
-        });
+        loadImages();
+        checkBusy();
     }, []);
 
     return (
@@ -109,13 +110,13 @@ function App() {
             </Grid>
 
             <br />
-            <PhotoGallery photos={photos} onClick={openLightbox} />
+            <PhotoGallery photos={images} onClick={openLightbox} />
             <ModalGateway>
                 {viewerIsOpen && (
                     <Modal onClose={closeLightbox}>
                         <Carousel
                             currentIndex={currentImage}
-                            views={photos.map((x) => ({
+                            views={images.map((x) => ({
                                 ...x,
                                 srcset: x.srcSet,
                                 caption: x.title,
@@ -124,7 +125,7 @@ function App() {
                     </Modal>
                 )}
             </ModalGateway>
-            <Copyright/>
+            <Copyright />
         </>
     );
 }
