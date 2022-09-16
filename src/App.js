@@ -7,7 +7,25 @@ import Copyright from "./Copyright";
 
 const API_URL = "https://mega.maxsoft.tk";
 
-const blacklist = ["00002.png", "00004.png", "00010.png", "00014.png", "00005.png", "00047.png", "00071.png"];
+const blacklist = [
+    "00002.png",
+    "00001.png",
+    "00004.png",
+    "00009.png",
+    "00006.png",
+    "00008.png",
+    "00010.png",
+    "00014.png",
+    "00027.png",
+    "00030.png",
+    "00005.png",
+    "00047.png",
+    "00036.png",
+    "00042.png",
+    "00063.png",
+    "00071.png",
+    "00072.png",
+];
 
 function App() {
     const [images, setImages] = useState([]);
