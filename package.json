@@ -10,7 +10,6 @@
         "react-images": "^1.2.0-beta.7",
         "react-photo-gallery": "^8.0.0",
         "react-scripts": "5.0.1",
-        "web-vitals": "^3.0.1",
         "workbox-background-sync": "^6.5.4",
         "workbox-broadcast-update": "^6.5.4",
         "workbox-cacheable-response": "^6.5.4",
