@@ -57,6 +57,11 @@ app.post("/prompt", (req, res) => {
 });
 
 app.use("/", serveIndex("txt2img-samples/samples")); // shows you the file list
-app.use("/", express.static("txt2img-samples/samples")); // serve the actual files
+app.use(
+    "/",
+    express.static("txt2img-samples/samples", {
+        maxAge: "500000000000", // uses milliseconds per docs
+    })
+); // serve the actual files
 
 app.listen(8080);
