@@ -1,8 +1,5 @@
 # Stable Diffusion
 
-Demo:
-https://ai.maxsoft.tk/
-
 ReactJS frontend with simple ExpressJS API to stable diffusion generation script.
 
 See:
